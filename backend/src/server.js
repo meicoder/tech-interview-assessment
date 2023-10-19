@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
@@ -8,10 +9,13 @@ app.get('/', (req, res) => {
 });
 // connect to DB
 mongoose
-    .connect('mongodb://mongo/laundrydb')
+    .connect(process.env.MONGO_URI)
     .then(() => {
-        app.listen(3000, () => {
-            console.log('connected to DB & listening on port', 3000);
+        app.listen(process.env.PORT, () => {
+            console.log(
+                'connected to DB & listening on port',
+                process.env.PORT
+            );
         });
     })
     .catch((error) => {
