@@ -2,9 +2,9 @@ import Body from './components/Body';
 
 function App() {
     return (
-        <div className="bg-custom-white h-screen">
+        <main className="bg-custom-white h-screen flex justify-center">
             <Body />
-        </div>
+        </main>
     );
 }
 

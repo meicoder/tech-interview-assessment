@@ -1,17 +1,8 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Invoice } from '../interfaces/invoice';
+import InvoiceItem from './InvoiceItem';
 
-interface Invoice {
-    _id: string;
-    invoice_number: string;
-    total: string;
-    currency: string;
-    invoice_date: string;
-    due_date: string;
-    vendor_name: string;
-    remittance_address: string;
-    status: string;
-}
 const Body = () => {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     useEffect(() => {
@@ -24,11 +15,13 @@ const Body = () => {
         getInvoices();
     }, []);
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col max-w-5xl">
             <h1>Invoices</h1>
-            {invoices.map((invoice) => {
-                return <div key={invoice._id}>{invoice.vendor_name} </div>;
-            })}
+            <div className="flex flex-col gap-4">
+                {invoices.map((invoice) => {
+                    return <InvoiceItem invoice={invoice} key={invoice._id} />;
+                })}
+            </div>
         </div>
     );
 };
