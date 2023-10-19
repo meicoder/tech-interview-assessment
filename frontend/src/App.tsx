@@ -1,5 +1,11 @@
+import Body from './components/Body';
+
 function App() {
-    return <div className="text-5xl text-red-900">App</div>;
+    return (
+        <div className="bg-custom-white h-screen">
+            <Body />
+        </div>
+    );
 }
 
 export default App;
