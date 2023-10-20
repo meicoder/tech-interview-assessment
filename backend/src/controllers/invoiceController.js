@@ -20,47 +20,16 @@ module.exports = (io) => {
             remittance_address
         } = req.body;
 
-        let emptyFields = [];
-
-        if (!invoice_number) {
-            emptyFields.push('invoice_number');
-        }
-        if (!total) {
-            emptyFields.push('total');
-        }
-        if (!currency) {
-            emptyFields.push('currency');
-        }
-        if (!invoice_date) {
-            emptyFields.push('invoice_date');
-        }
-        if (!due_date) {
-            emptyFields.push('due_date');
-        }
-        if (!vendor_name) {
-            emptyFields.push('vendor_name');
-        }
-        if (!remittance_address) {
-            emptyFields.push('remittance_address');
-        }
-
-        if (emptyFields.length > 0) {
-            return res
-                .status(400)
-                .json({ error: 'Please fill in all fields', emptyFields });
-        }
         try {
-            const status = 'pending';
-            const invoice = await Invoice.create({
+            const invoice = await Invoice.addInvoice(
                 invoice_number,
                 total,
                 currency,
                 invoice_date,
                 due_date,
                 vendor_name,
-                remittance_address,
-                status
-            });
+                remittance_address
+            );
             res.status(200).json({
                 message: 'invoice submitted successfully'
             });
