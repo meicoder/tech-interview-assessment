@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { Invoice } from '../interfaces/invoice';
 import InvoiceItem from './InvoiceItem';
 import { io } from 'socket.io-client';
-import Error from './Error';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { addInvoice, fetchInvoices } from '../redux/invoiceSlice';
-import Loader from './Loader';
+import InvoiceList from './InvoiceList';
 
 const socket = io('http://localhost:3000');
 
@@ -44,15 +43,49 @@ const Body = () => {
     }, [invoices, dispatch]);
 
     return (
-        <div className="flex flex-col">
-            <h1>Invoices</h1>
-            {!isConnected && <Error message="Socket not connected" />}
-            {status === 'loading' && <Loader />}
-            <div className="flex flex-col gap-4">
-                {invoices.map((invoice) => {
-                    return <InvoiceItem invoice={invoice} key={invoice._id} />;
-                })}
-            </div>
+        <div className="flex flex-col gap-8">
+            <InvoiceList
+                title="Pending Invoices"
+                invoices={invoices.filter(
+                    (invoice) => invoice.status === 'pending'
+                )}
+                isConnected={isConnected}
+                status={status}
+            >
+                <div className="flex flex-col gap-4">
+                    {invoices
+                        .filter((invoice) => invoice.status === 'pending')
+                        .map((invoice) => {
+                            return (
+                                <InvoiceItem
+                                    invoice={invoice}
+                                    key={invoice._id}
+                                />
+                            );
+                        })}
+                </div>
+            </InvoiceList>
+            <InvoiceList
+                title="Approved Invoices"
+                invoices={invoices.filter(
+                    (invoice) => invoice.status !== 'pending'
+                )}
+                isConnected={isConnected}
+                status={status}
+            >
+                <div className="flex flex-col gap-4">
+                    {invoices
+                        .filter((invoice) => invoice.status !== 'pending')
+                        .map((invoice) => {
+                            return (
+                                <InvoiceItem
+                                    invoice={invoice}
+                                    key={invoice._id}
+                                />
+                            );
+                        })}
+                </div>
+            </InvoiceList>
         </div>
     );
 };

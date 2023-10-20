@@ -26,6 +26,20 @@ const approveInvoice = createAsyncThunk(
     }
 );
 
+const deleteInvoice = createAsyncThunk(
+    'invoice/delete',
+    async (invoice: Invoice) => {
+        try {
+            const response = await axios.delete(
+                `http://localhost:3000/api/invoices/${invoice._id}`
+            );
+            return response.data;
+        } catch (error) {
+            console.log('error', error);
+        }
+    }
+);
+
 const initialState: {
     invoices: Array<Invoice>;
     status: string;
@@ -64,11 +78,23 @@ export const invoiceSlice = createSlice({
             })
             .addCase(approveInvoice.pending, (state) => {
                 state.status = 'loading';
+            })
+            .addCase(deleteInvoice.fulfilled, (state, action) => {
+                const filteredInvoices = state.invoices.filter((invoice) => {
+                    if (invoice._id !== action.payload._id) {
+                        return invoice;
+                    }
+                });
+                state.invoices = filteredInvoices;
+                state.status = 'succeeded';
+            })
+            .addCase(deleteInvoice.pending, (state) => {
+                state.status = 'loading';
             });
     }
 });
 
-export { fetchInvoices, approveInvoice };
+export { fetchInvoices, approveInvoice, deleteInvoice };
 export const { addInvoice } = invoiceSlice.actions;
 
 export default invoiceSlice.reducer;

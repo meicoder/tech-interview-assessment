@@ -3,7 +3,7 @@ import Status from './Status';
 import Button from './Button';
 import { BsPinMapFill } from 'react-icons/bs';
 import { useAppDispatch } from '../../src/redux/hooks';
-import { approveInvoice } from '../redux/invoiceSlice';
+import { approveInvoice, deleteInvoice } from '../redux/invoiceSlice';
 
 interface props {
     invoice: Invoice;
@@ -12,6 +12,10 @@ const InvoiceItem = ({ invoice }: props) => {
     const dispatch = useAppDispatch();
     const handleApproveBtn = async () => {
         dispatch(approveInvoice(invoice));
+    };
+
+    const handleDeleteBtn = async () => {
+        dispatch(deleteInvoice(invoice));
     };
 
     return (
@@ -23,10 +27,10 @@ const InvoiceItem = ({ invoice }: props) => {
                 </h2>
             </div>
             <div className="flex flex-col items-center justify-center gap-1 ">
-                <h2 className=" text-gray-500 text-lg font-semibold ">
+                <h2 className=" text-gray-400 text-lg font-semibold ">
                     {invoice.vendor_name}
                 </h2>
-                <h2 className=" text-gray-500 text-xs flex gap-2 ">
+                <h2 className=" text-gray-400 text-xs flex gap-2  ">
                     <BsPinMapFill />
                     {invoice.remittance_address}
                 </h2>
@@ -51,7 +55,7 @@ const InvoiceItem = ({ invoice }: props) => {
                         <Button
                             text="Delete"
                             disabled={false}
-                            onClickHandler={handleApproveBtn}
+                            onClickHandler={handleDeleteBtn}
                         />
                     </div>
                 </div>
