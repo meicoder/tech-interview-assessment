@@ -7,20 +7,29 @@ const Status = ({ status }: props) => {
         <div
             className={
                 'flex items-center gap-2 p-2 rounded-lg ' +
-                (status === 'Approved'
+                (status === 'approved'
                     ? 'bg-custom-green-opacity'
                     : 'bg-custom-yellow-opacity')
             }
         >
             <div
                 className={
-                    'h-3 w-3 rounded-full ' +
-                    (status === 'Approved'
+                    'h-2 w-2 rounded-full ' +
+                    (status === 'approved'
                         ? 'bg-custom-green'
                         : 'bg-custom-yellow')
                 }
             ></div>
-            <span>{status}</span>
+            <span
+                className={
+                    'text-xs ' +
+                    (status === 'approved'
+                        ? 'text-custom-green'
+                        : 'text-custom-yellow')
+                }
+            >
+                {status}
+            </span>
         </div>
     );
 };

@@ -14,8 +14,9 @@ const Body = () => {
         };
         getInvoices();
     }, []);
+
     return (
-        <div className="flex flex-col max-w-5xl">
+        <div className="flex flex-col">
             <h1>Invoices</h1>
             <div className="flex flex-col gap-4">
                 {invoices.map((invoice) => {
