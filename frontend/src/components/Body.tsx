@@ -5,6 +5,8 @@ import { io } from 'socket.io-client';
 import { useAppDispatch, useAppSelector } from '../../src/redux/hooks';
 import { addInvoice, fetchInvoices } from '../redux/invoiceSlice';
 import InvoiceList from './InvoiceList';
+import Error from './Error';
+import Loader from './Loader';
 
 const socket = io('http://localhost:3000');
 
@@ -44,6 +46,8 @@ const Body = () => {
 
     return (
         <div className="flex flex-col gap-8">
+            {!isConnected && <Error message="Socket not connected" />}
+            {status === 'loading' && <Loader />}
             <InvoiceList
                 title="Pending Invoices"
                 invoices={invoices.filter(
