@@ -4,7 +4,8 @@ const tasksController = require('../controllers/invoiceController');
 const router = express.Router();
 
 module.exports = (io) => {
-    const { createInvoice, getInvoices, updateInvoice } = tasksController(io);
+    const { createInvoice, getInvoices, updateInvoice, deleteInvoice } =
+        tasksController(io);
 
     // GET all invoices
     router.get('/', getInvoices);
@@ -14,6 +15,9 @@ module.exports = (io) => {
 
     // UPDATE a invoice
     router.patch('/:id', updateInvoice);
+
+    // DELETE a invoice
+    router.delete('/:id', deleteInvoice);
 
     return router;
 };

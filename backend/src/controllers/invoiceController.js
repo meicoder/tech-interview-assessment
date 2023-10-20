@@ -95,9 +95,28 @@ module.exports = (io) => {
 
         return res.status(200).json(invoice);
     };
+
+    // Delete a invoice
+    const deleteInvoice = async (req, res) => {
+        const { id } = req.params;
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(404).json({
+                msg: 'No such invoice'
+            });
+        }
+        const invoice = await Invoice.findOneAndDelete({ _id: id });
+
+        if (!invoice) {
+            return res.status(404).json({ msg: 'No such invoice' });
+        }
+
+        return res.status(200).json(invoice);
+    };
+
     return {
         getInvoices,
         createInvoice,
-        updateInvoice
+        updateInvoice,
+        deleteInvoice
     };
 };
