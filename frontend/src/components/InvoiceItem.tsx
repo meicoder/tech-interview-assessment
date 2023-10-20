@@ -2,20 +2,16 @@ import { Invoice } from '../interfaces/invoice';
 import Status from './Status';
 import Button from './Button';
 import { BsPinMapFill } from 'react-icons/bs';
-import axios from 'axios';
+import { useAppDispatch } from '../../src/redux/hooks';
+import { approveInvoice } from '../redux/invoiceSlice';
 
 interface props {
     invoice: Invoice;
 }
 const InvoiceItem = ({ invoice }: props) => {
+    const dispatch = useAppDispatch();
     const handleApproveBtn = async () => {
-        console.log('acaca');
-
-        const response = await axios.patch(
-            `http://localhost:3000/api/invoices/${invoice._id}`,
-            { status: 'approved' }
-        );
-        console.log('response', response);
+        dispatch(approveInvoice(invoice));
     };
 
     return (
