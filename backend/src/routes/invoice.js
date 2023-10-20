@@ -1,19 +1,19 @@
 const express = require('express');
-const {
-    getInvoices,
-    createInvoice,
-    updateInvoice
-} = require('../controllers/invoiceController');
+const tasksController = require('../controllers/invoiceController');
 
 const router = express.Router();
 
-// GET all invoices
-router.get('/', getInvoices);
+module.exports = (io) => {
+    const { createInvoice, getInvoices, updateInvoice } = tasksController(io);
 
-// POST new invoice
-router.post('/', createInvoice);
+    // GET all invoices
+    router.get('/', getInvoices);
 
-// UPDATE a invoice
-router.patch('/:id', updateInvoice);
+    // POST new invoice
+    router.post('/', createInvoice);
 
-module.exports = router;
+    // UPDATE a invoice
+    router.patch('/:id', updateInvoice);
+
+    return router;
+};
