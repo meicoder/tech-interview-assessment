@@ -1,49 +1,49 @@
 import { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
+/* import axios, { AxiosError } from 'axios'; */
 import { Invoice } from '../interfaces/invoice';
 import InvoiceItem from './InvoiceItem';
+import { io } from 'socket.io-client';
+import Error from './Error';
+
+const socket = io('http://localhost:3000');
 
 const Body = () => {
     const [invoices, setInvoices] = useState<Invoice[]>([]);
-    const [error, setError] = useState<AxiosError | null>(null);
+    const [isConnected, setIsConnected] = useState(socket.connected);
 
     useEffect(() => {
-        const getInvoices = async () => {
-            const abortController = new AbortController();
-            const signal = abortController.signal;
-            try {
-                const response = await axios.get(
-                    'http://localhost:3000/api/invoices',
-                    { signal }
-                );
-                setInvoices(response.data);
-            } catch (error) {
-                if (axios.isAxiosError(error)) {
-                    if (axios.isCancel(error)) {
-                        console.log('Request canceled:', error.message);
-                    } else {
-                        setError(error);
-                    }
-                }
-            }
+        function onConnect() {
+            setIsConnected(true);
+        }
+
+        function onDisconnect() {
+            setIsConnected(false);
+        }
+
+        function onNewInvoice(value: Invoice) {
+            setInvoices((previous) => [...previous, value]);
+        }
+
+        socket.on('connect', onConnect);
+        socket.on('disconnect', onDisconnect);
+        socket.on('newInvoice', onNewInvoice);
+
+        return () => {
+            socket.off('connect', onConnect);
+            socket.off('disconnect', onDisconnect);
+            socket.off('newInvoice', onNewInvoice);
         };
-        getInvoices();
-    }, []);
+    }, [invoices]);
 
     return (
         <div className="flex flex-col">
             <h1>Invoices</h1>
-            {error ? (
-                <p>Error: {error.message}</p>
-            ) : (
-                <div className="flex flex-col gap-4">
-                    {invoices.map((invoice) => {
-                        return (
-                            <InvoiceItem invoice={invoice} key={invoice._id} />
-                        );
-                    })}
-                </div>
-            )}
+            {!isConnected && <Error message="Socket not connected" />}
+            <div className="flex flex-col gap-4">
+                {invoices.map((invoice) => {
+                    return <InvoiceItem invoice={invoice} key={invoice._id} />;
+                })}
+            </div>
         </div>
     );
 };
