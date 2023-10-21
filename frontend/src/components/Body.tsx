@@ -45,7 +45,7 @@ const Body = () => {
     }, [invoices, dispatch]);
 
     return (
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-8 w-full md:max-w-5xl px-4 ">
             {!isConnected && <Error message="Socket not connected" />}
             {status === 'loading' && <Loader />}
             <InvoiceList
