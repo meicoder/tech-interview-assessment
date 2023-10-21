@@ -4,8 +4,6 @@ interface props {
     onClickHandler: () => Promise<void>;
 }
 const Button = ({ text, disabled, onClickHandler }: props) => {
-    console.log('disabled', disabled);
-
     return (
         <button
             disabled={disabled}

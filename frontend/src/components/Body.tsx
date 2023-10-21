@@ -8,7 +8,7 @@ import InvoiceList from './InvoiceList';
 import Error from './Error';
 import Loader from './Loader';
 
-const socket = io('http://localhost:3000');
+const socket = io(import.meta.env.VITE_BACKEND_URI);
 
 const Body = () => {
     const dispatch = useAppDispatch();

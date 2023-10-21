@@ -4,7 +4,9 @@ import axios from 'axios';
 
 const fetchInvoices = createAsyncThunk('invoices/fetch', async () => {
     try {
-        const response = await axios.get('http://localhost:3000/api/invoices');
+        const response = await axios.get(
+            `${import.meta.env.VITE_BACKEND_URI}/api/invoices`
+        );
         return response.data;
     } catch (error) {
         console.log('error', error);
@@ -16,7 +18,9 @@ const approveInvoice = createAsyncThunk(
     async (invoice: Invoice) => {
         try {
             const response = await axios.patch(
-                `http://localhost:3000/api/invoices/${invoice._id}`,
+                `${import.meta.env.VITE_BACKEND_URI}/api/invoices/${
+                    invoice._id
+                }`,
                 { status: 'approved' }
             );
             return response.data;
@@ -31,7 +35,9 @@ const deleteInvoice = createAsyncThunk(
     async (invoice: Invoice) => {
         try {
             const response = await axios.delete(
-                `http://localhost:3000/api/invoices/${invoice._id}`
+                `${import.meta.env.VITE_BACKEND_URI}/api/invoices/${
+                    invoice._id
+                }`
             );
             return response.data;
         } catch (error) {
